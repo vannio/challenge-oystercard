@@ -59,5 +59,5 @@ Object | Message
 --- | ---
 Customer |
 Oystercard |
-- public | balance, top_up, touch_in, touch_out, view_history
-- private | limit_exceeded?, calculate_fare, deduct_fare
+- public | balance, top_up, touch_in, touch_out, view_history, in_journey?
+- private | exceeded_funds?, enough_funds?, calculate_fare, deduct_fare

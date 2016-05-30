@@ -17,9 +17,10 @@ class Oystercard
     @balance += amount
   end
 
-  def touch_in
+  def touch_in(station = nil)
     fail ERROR[:insufficient_funds] unless enough_funds?
     @journeying = true
+    station
   end
 
   def touch_out
