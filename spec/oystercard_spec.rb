@@ -1,10 +1,17 @@
 require "oystercard"
 
 describe Oystercard do
-  let(:station) { double(:station) }
-  
-  it "has an initial balance of 0" do
-    expect(subject.balance).to eq(0)
+  let(:entry_station) { double(:station) }
+  let(:exit_station) { double(:station) }
+
+  describe "#initialize" do
+    it "has an initial balance of 0" do
+      expect(subject.balance).to eq(0)
+    end
+
+    it "has an initial empty journey history" do
+      expect(subject.journey_history).to be_empty
+    end
   end
 
   describe "#top_up" do
@@ -28,31 +35,39 @@ describe Oystercard do
 
     describe "#touch_in" do
       it "should remember the entry station" do
-        expect(subject.touch_in(station)).to eq subject.entry_station
+        expect(subject.touch_in(entry_station)).to eq subject.entry_station
       end
     end
 
     describe "#touch_out" do
       it "should deduct minimum fare from balance when journey ends" do
         expect do
-          subject.touch_out
+          subject.touch_out(exit_station)
         end.to change { subject.balance }.by(- described_class::MINIMUM_FARE)
       end
 
       it "should forget the entry station" do
-        subject.touch_in(station)
+        subject.touch_in(entry_station)
         expect do
-          subject.touch_out
+          subject.touch_out(exit_station)
         end.to change { subject.entry_station }.to be_nil
+      end
+
+      it "should update the journey history" do
+        subject.touch_in(entry_station)
+        subject.touch_out(exit_station)
+        journey = { start: entry_station, end: exit_station }
+
+        expect(subject.journey_history).to contain_exactly(journey)
       end
     end
   end
 
   context "has insufficient funds" do
     describe "#touch_in" do
-      it "should not allow touching in when balance is too low" do
+      it "should not allow touching in when card has insufficient funds" do
         expect do
-          subject.touch_in(station)
+          subject.touch_in(entry_station)
         end.to raise_error(described_class::ERROR[:insufficient_funds])
       end
     end
@@ -63,18 +78,18 @@ describe Oystercard do
       subject.top_up(described_class::MINIMUM_FARE)
     end
 
-    it "should not be in journey initially" do
+    it "should not be in_journey initially" do
       expect(subject).to_not be_in_journey
     end
 
-    it "should be in journey after touching in" do
-      subject.touch_in(station)
+    it "should be in_journey after touching in" do
+      subject.touch_in(entry_station)
       expect(subject).to be_in_journey
     end
 
-    it "should not be in journey after touching out" do
-      subject.touch_in(station)
-      subject.touch_out
+    it "should not be in_journey after touching out" do
+      subject.touch_in(entry_station)
+      subject.touch_out(exit_station)
       expect(subject).to_not be_in_journey
     end
   end

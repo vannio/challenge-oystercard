@@ -6,10 +6,11 @@ class Oystercard
     insufficient_funds: "Balance is too low. Please top up."
   }
 
-  attr_reader :balance, :entry_station
+  attr_reader :balance, :entry_station, :journey_history
 
   def initialize
     @balance = 0
+    @journey_history = []
   end
 
   def top_up(amount)
@@ -22,8 +23,9 @@ class Oystercard
     @entry_station = station
   end
 
-  def touch_out
+  def touch_out(station = nil)
     deduct_fare(MINIMUM_FARE)
+    update_history(@entry_station, station)
     @entry_station = nil
   end
 
@@ -43,5 +45,9 @@ class Oystercard
 
     def deduct_fare(amount)
       @balance -= amount
+    end
+
+    def update_history(entry_station, exit_station)
+      @journey_history << { start: entry_station, end: exit_station }
     end
 end
