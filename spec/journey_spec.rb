@@ -15,16 +15,38 @@ describe Journey do
     end
   end
 
-  context "has ended" do
-    it "confirms the journey is complete" do
-      subject.complete_journey(exit_station)
-      expect(subject.incomplete?).to be_falsey
+  describe "#fare" do
+    it "should have a default penalty fare" do
+      expect(subject.fare).to eq(described_class::PENALTY_FARE)
     end
+  end
 
+  describe "#complete_journey" do
     it "should remember the exit station" do
       expect do
         subject.complete_journey(exit_station)
       end.to change { subject.exit_station }
+    end
+
+    it "should update the fare" do
+      expect do
+        subject.complete_journey(exit_station)
+      end.to change { subject.fare }
+    end
+  end
+
+  describe "#incomplete?" do
+    context "incomplete journey" do
+      it "confirms the journey is not yet complete" do
+        expect(subject.incomplete?).to be true
+      end
+    end
+
+    context "complete journey" do
+      it "confirms the journey is complete" do
+        subject.complete_journey(exit_station)
+        expect(subject.incomplete?).to be false
+      end
     end
   end
 end

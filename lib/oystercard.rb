@@ -22,21 +22,23 @@ class Oystercard
 
   def touch_in(station = nil)
     fail ERROR[:insufficient_funds] unless enough_funds?
-    @current_journey = Journey.new(station)
+    self.current_journey = Journey.new(station)
     update_history
   end
 
   def touch_out(station = nil)
-    deduct_fare(MINIMUM_FARE)
-    @current_journey.complete_journey(station)
+    deduct_fare
+    current_journey.complete_journey(station)
   end
 
   def in_journey?
-    @current_journey.incomplete? if @current_journey
+    current_journey.incomplete? if current_journey
   end
 
   private
+
     attr_writer :balance, :journey_history
+    attr_accessor :current_journey
 
     def limit_exceeded?(amount)
       self.balance + amount > MAXIMUM_BALANCE
@@ -46,11 +48,11 @@ class Oystercard
       self.balance >= MINIMUM_FARE
     end
 
-    def deduct_fare(amount)
-      self.balance -= amount
+    def deduct_fare
+      self.balance -= current_journey.fare
     end
 
     def update_history
-      self.journey_history << @current_journey
+      self.journey_history << current_journey
     end
 end
