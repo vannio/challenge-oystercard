@@ -27,6 +27,7 @@ class Oystercard
   end
 
   def touch_out
+    deduct_fare(MINIMUM_FARE)
     @journeying = false
   end
 

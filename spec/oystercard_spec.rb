@@ -7,7 +7,9 @@ describe Oystercard do
 
   describe "#top_up" do
     it "is topped up by a specified amount" do
-      expect { subject.top_up(10) }.to change { subject.balance }.by(10)
+      expect do
+        subject.top_up(described_class::MINIMUM_FARE)
+      end.to change { subject.balance }.by(described_class::MINIMUM_FARE)
     end
 
     it "does not allow topping up beyond the maximum balance limit" do
@@ -19,8 +21,10 @@ describe Oystercard do
 
   describe "#deduct_fare" do
     it "deducts a fare from the balance" do
-      subject.top_up(10)
-      expect { subject.deduct_fare(1) }.to change { subject.balance }.by(-1)
+      subject.top_up(described_class::MINIMUM_FARE)
+      expect do
+        subject.deduct_fare(described_class::MINIMUM_FARE)
+      end.to change { subject.balance }.by(- described_class::MINIMUM_FARE)
     end
   end
 
@@ -36,11 +40,17 @@ describe Oystercard do
 
   describe "#touch_out" do
     it { is_expected.to respond_to(:touch_out) }
+
+    it "should deduct minimum fare from balance when journey ends" do
+      expect do
+        subject.touch_out
+      end.to change { subject.balance }.by(- described_class::MINIMUM_FARE)
+    end
   end
 
   describe "#in_journey?" do
     before(:each) do
-      subject.top_up(1)
+      subject.top_up(described_class::MINIMUM_FARE)
     end
 
     it "should not be in journey initially" do
