@@ -1,6 +1,8 @@
 require "oystercard"
 
 describe Oystercard do
+  let(:station) { double(:station) }
+  
   it "has an initial balance of 0" do
     expect(subject.balance).to eq(0)
   end
@@ -20,8 +22,6 @@ describe Oystercard do
   end
 
   context "has sufficient funds" do
-    let(:station) { double(:station) }
-
     before(:each) do
       subject.top_up(described_class::MINIMUM_FARE)
     end
@@ -52,7 +52,7 @@ describe Oystercard do
     describe "#touch_in" do
       it "should not allow touching in when balance is too low" do
         expect do
-          subject.touch_in
+          subject.touch_in(station)
         end.to raise_error(described_class::ERROR[:insufficient_funds])
       end
     end
@@ -68,12 +68,12 @@ describe Oystercard do
     end
 
     it "should be in journey after touching in" do
-      subject.touch_in
+      subject.touch_in(station)
       expect(subject).to be_in_journey
     end
 
     it "should not be in journey after touching out" do
-      subject.touch_in
+      subject.touch_in(station)
       subject.touch_out
       expect(subject).to_not be_in_journey
     end

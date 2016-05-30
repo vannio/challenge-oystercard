@@ -19,18 +19,16 @@ class Oystercard
 
   def touch_in(station = nil)
     fail ERROR[:insufficient_funds] unless enough_funds?
-    @journeying = true
     @entry_station = station
   end
 
   def touch_out
     deduct_fare(MINIMUM_FARE)
-    @journeying = false
     @entry_station = nil
   end
 
   def in_journey?
-    @journeying
+    @entry_station
   end
 
   private
