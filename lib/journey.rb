@@ -14,7 +14,7 @@ class Journey
   end
 
   def incomplete?
-    !self.exit_station
+    !exit_station
   end
 
   private
