@@ -39,26 +39,47 @@ describe Oystercard do
       end
     end
 
-    describe "#touch_out" do
-      it "should deduct minimum fare from balance when journey ends" do
-        expect do
-          subject.touch_out(exit_station)
-        end.to change { subject.balance }.by(- described_class::MINIMUM_FARE)
-      end
-
-      it "should forget the entry station" do
+    context "is touched in" do
+      before do
         subject.touch_in(entry_station)
-        expect do
-          subject.touch_out(exit_station)
-        end.to change { subject.entry_station }.to be_nil
       end
 
-      it "should update the journey history" do
+      describe "#touch_out" do
+        it "should deduct minimum fare from balance when journey ends" do
+          expect do
+            subject.touch_out(exit_station)
+          end.to change { subject.balance }.by(- described_class::MINIMUM_FARE)
+        end
+
+        it "should forget the entry station" do
+          expect do
+            subject.touch_out(exit_station)
+          end.to change { subject.entry_station }.to be_nil
+        end
+
+        it "should update the journey history" do
+          subject.touch_out(exit_station)
+          journey = { entry: entry_station, exit: exit_station }
+
+          expect(subject.journey_history).to contain_exactly(journey)
+        end
+      end
+    end
+
+    describe "#in_journey?" do
+      it "should not be in_journey initially" do
+        expect(subject).to_not be_in_journey
+      end
+
+      it "should be in_journey after touching in" do
+        subject.touch_in(entry_station)
+        expect(subject).to be_in_journey
+      end
+
+      it "should not be in_journey after touching out" do
         subject.touch_in(entry_station)
         subject.touch_out(exit_station)
-        journey = { start: entry_station, end: exit_station }
-
-        expect(subject.journey_history).to contain_exactly(journey)
+        expect(subject).to_not be_in_journey
       end
     end
   end
@@ -70,27 +91,6 @@ describe Oystercard do
           subject.touch_in(entry_station)
         end.to raise_error(described_class::ERROR[:insufficient_funds])
       end
-    end
-  end
-
-  describe "#in_journey?" do
-    before(:each) do
-      subject.top_up(described_class::MINIMUM_FARE)
-    end
-
-    it "should not be in_journey initially" do
-      expect(subject).to_not be_in_journey
-    end
-
-    it "should be in_journey after touching in" do
-      subject.touch_in(entry_station)
-      expect(subject).to be_in_journey
-    end
-
-    it "should not be in_journey after touching out" do
-      subject.touch_in(entry_station)
-      subject.touch_out(exit_station)
-      expect(subject).to_not be_in_journey
     end
   end
 end
