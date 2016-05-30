@@ -60,4 +60,4 @@ Object | Message
 Customer |
 Oystercard |
 - public | balance, top_up, touch_in, touch_out, view_history
-- private | calculate_fare, deduct_fare
+- private | limit_exceeded?, calculate_fare, deduct_fare
