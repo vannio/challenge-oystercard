@@ -28,7 +28,7 @@ describe Oystercard do
 
     describe "#touch_in" do
       it "should remember the entry station" do
-        expect(subject.touch_in(station)).to eq station
+        expect(subject.touch_in(station)).to eq subject.entry_station
       end
     end
 
@@ -37,6 +37,13 @@ describe Oystercard do
         expect do
           subject.touch_out
         end.to change { subject.balance }.by(- described_class::MINIMUM_FARE)
+      end
+
+      it "should forget the entry station" do
+        subject.touch_in(station)
+        expect do
+          subject.touch_out
+        end.to change { subject.entry_station }.to be_nil
       end
     end
   end
