@@ -58,6 +58,6 @@ I need to have the correct fare calculated
 Object | Message
 --- | ---
 Customer |
-Oystercard |
-- public | balance, top_up, touch_in, touch_out, view_history, in_journey?
-- private | exceeded_funds?, enough_funds?, calculate_fare, deduct_fare
+Oystercard | balance, top_up, touch_in, touch_out, journey_history, in_journey?
+Journey | complete?, fare, start, end
+Station | name, zone
