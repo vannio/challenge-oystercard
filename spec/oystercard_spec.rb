@@ -19,15 +19,6 @@ describe Oystercard do
     end
   end
 
-  describe "#deduct_fare" do
-    it "deducts a fare from the balance" do
-      subject.top_up(described_class::MINIMUM_FARE)
-      expect do
-        subject.deduct_fare(described_class::MINIMUM_FARE)
-      end.to change { subject.balance }.by(- described_class::MINIMUM_FARE)
-    end
-  end
-
   describe "#touch_in" do
     it { is_expected.to respond_to(:touch_in) }
 

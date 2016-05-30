@@ -17,10 +17,6 @@ class Oystercard
     @balance += amount
   end
 
-  def deduct_fare(amount)
-    @balance -= amount
-  end
-
   def touch_in
     fail ERROR[:insufficient_funds] unless enough_funds?
     @journeying = true
@@ -43,5 +39,9 @@ class Oystercard
 
     def enough_funds?
       @balance >= MINIMUM_FARE
+    end
+
+    def deduct_fare(amount)
+      @balance -= amount
     end
 end
