@@ -14,6 +14,11 @@ describe Oystercard do
     it "has no entry station set" do
       expect(subject.entry_station).to eq nil
     end
+
+    it "has no journey history saved" do
+      expect(subject.journeys).to be_empty
+    end
+
   end
 
   it "responds to top_up with argument" do
@@ -47,23 +52,44 @@ describe Oystercard do
   end
 
   describe "#touch_out" do
-    let(:station){ double :station }
+
+    let(:entry_station){ double :station }
+    let(:exit_station){ double :station }
+
     it "can touch out" do
       subject.top_up(1)
-      subject.touch_in(station)
-      subject.touch_out
+      subject.touch_in(entry_station)
+      subject.touch_out(exit_station)
       expect(subject).not_to be_in_journey
     end
+
     it "deducts min fare from balance on touch out" do
-      expect{subject.touch_out}.to change{subject.balance}.by(-1)
+      expect{subject.touch_out(exit_station)}.to change{subject.balance}.by(-1)
+    end
+
+    it "stores exit station" do
+      subject.top_up(1)
+      subject.touch_in(entry_station)
+      subject.touch_out(exit_station)
+      expect(subject.exit_station).to eq exit_station
     end
 
     it "forgets entry station" do
       subject.top_up(1)
-      subject.touch_in(station)
-      subject.touch_out
+      subject.touch_in(entry_station)
+      subject.touch_out(exit_station)
       expect(subject.entry_station).to eq nil
     end
+
+    let(:journey){ {entry_station: entry_station, exit_station: exit_station} }
+
+    it "stores a journey" do
+      subject.top_up(1)
+      subject.touch_in(entry_station)
+      subject.touch_out(exit_station)
+      expect(subject.journeys).to include journey
+    end
+
   end
 
   describe "#top_up" do
