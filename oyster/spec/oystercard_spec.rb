@@ -11,5 +11,19 @@ describe '#balance' do
 	it 'has an initial balance of 0' do
 		expect(subject.balance).to eq 0
 	end
+
+
+describe "#top_up" do
+
+  it { is_expected.to respond_to(:top_up).with(1).argument }
+
+  it "should increase the balance" do
+    bal = subject.balance
+    expect(subject.top_up(5)).to be == bal + 5
+  end
+
+
+end
+
 end
 end
