@@ -4,6 +4,7 @@ describe Oystercard do
   subject(:oystercard) { described_class.new }
 
   let(:station) { double(:station) }
+  let(:station2) { double(:station) }
 
   describe "#balance" do
     it "doesn't return nil" do
@@ -48,16 +49,16 @@ describe Oystercard do
     end
 
     it "ends the journey" do
-      oystercard.touch_out
+      oystercard.touch_out(station2)
       expect(oystercard.entry_station).to be nil
     end
 
     it "deducts the minimum fare" do
-      expect { oystercard.touch_out }.to change { oystercard.balance }.by(-Oystercard::MINIMUM_FARE)
+      expect { oystercard.touch_out(station2) }.to change { oystercard.balance }.by(-Oystercard::MINIMUM_FARE)
     end
 
     it "forgets the entry station" do
-      oystercard.touch_out
+      oystercard.touch_out(station2)
       expect(oystercard.entry_station).to be nil
     end
   end
@@ -70,6 +71,26 @@ describe Oystercard do
 
     it "records entry station" do
       expect(oystercard.entry_station).to eq station
+    end
+  end
+
+  describe "#log" do
+    it "has an empty log to begin with" do
+      expect(oystercard.log).to eq []
+    end
+
+    context "has made a journey" do
+      subject(:oystercard) { described_class.new }
+
+      before do
+        oystercard.top_up(10)
+        oystercard.touch_in(station)
+        oystercard.touch_out(station2)
+      end
+
+      it "has a log of the journey" do
+        expect(oystercard.log).to eq([{ entry: station, exit: station2 }])
+      end
     end
   end
 end

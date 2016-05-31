@@ -4,10 +4,11 @@ class Oystercard
   MAX_LIM_ERR_MSG = "£#{MAXIMUM_LIMIT} is the maximum limit"
   MIN_LIM_ERR_MSG = "£#{MINIMUM_FARE} is the minimum limit"
 
-  attr_reader :balance, :entry_station
+  attr_reader :balance, :entry_station, :log
 
   def initialize
     @balance = 0
+    @log = []
   end
 
   def top_up(amount)
@@ -20,8 +21,9 @@ class Oystercard
     @entry_station = station
   end
 
-  def touch_out
+  def touch_out(station)
     deduct(MINIMUM_FARE)
+    @log << { entry: @entry_station, exit: station }
     @entry_station = nil
   end
 
