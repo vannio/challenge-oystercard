@@ -1,6 +1,7 @@
 class Oystercard
 
   MAX_BALANCE = 90
+  MIN_FARE = 1
 
   attr_reader :balance
 
@@ -14,6 +15,7 @@ class Oystercard
   end
 
   def touch_in
+    fail "Error: minimum balance less than minimum fare. Top-up!" if @balance < MIN_FARE
     @in_journey = true
   end
 

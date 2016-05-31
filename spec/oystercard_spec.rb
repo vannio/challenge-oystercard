@@ -20,15 +20,31 @@ describe Oystercard do
     expect(subject).to respond_to(:deduct).with(1).argument
   end
 
-  it "can touch in" do
-    subject.touch_in
-    expect(subject).to be_in_journey
+  describe "#touch_in" do
+
+    context "when card has sufficient balance" do
+
+      it "can touch in" do
+        subject.top_up(1)
+        subject.touch_in
+        expect(subject).to be_in_journey
+      end
+    end
+
+    context "when card has insufficient balance" do
+      it "raises error if card balance below minimum fare value" do
+        expect{ subject.touch_in }.to raise_error "Error: minimum balance less than minimum fare. Top-up!"
+      end
+    end
   end
 
-  it "can touch out" do
-    subject.touch_in
-    subject.touch_out
-    expect(subject).not_to be_in_journey
+  describe "#touch_out" do
+    it "can touch out" do
+      subject.top_up(1)
+      subject.touch_in
+      subject.touch_out
+      expect(subject).not_to be_in_journey
+    end
   end
 
   describe "#top_up" do
