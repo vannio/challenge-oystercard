@@ -9,7 +9,7 @@ describe "Feature test" do
 		oystercard.in_journey?
 		oystercard.touch_in(:station)
 		oystercard.touch_out(:station)
-
+		oystercard.journey
 
 	end
 end

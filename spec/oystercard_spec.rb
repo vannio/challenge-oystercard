@@ -7,6 +7,10 @@ describe Oystercard do
 	let(:station) { double :station }
 	let(:exit_station) { double :exit_station }
 
+	it 'has an empty list of arrays by default' do
+		expect(oystercard.journeys).to be_empty
+	end
+
 	context '#balance' do
 
 		it 'should eq zero by default' do
@@ -56,7 +60,7 @@ describe Oystercard do
 		it 'expects the card to save the entry station' do
 			oystercard.topup(10)
 			oystercard.touch_in(station)
-			expect(oystercard.entry_station).to eq(station)
+			expect(oystercard.journey[:entry_station]).to eq(station)
 		end
 
 		it 'allows user to touch in' do
@@ -67,6 +71,12 @@ describe Oystercard do
 
 		it 'fails if balance is below MIN_FARE' do
 			expect{oystercard.touch_in(station)}.to raise_error "insufficient balance"
+		end
+
+		it 'expects an entry_station to be stored in the hash @journey' do
+			oystercard.topup(10)
+			oystercard.touch_in(station)
+			expect(oystercard.journey[:entry_station]).to eq(station)
 		end
 
 	end
@@ -80,7 +90,7 @@ describe Oystercard do
 			oystercard.topup(10)
 			oystercard.touch_in(station)
 			oystercard.touch_out(exit_station)
-			expect(oystercard.exit_station).to eq(exit_station)
+			expect(oystercard.journey[:exit_station]).to eq(exit_station)
 		end
 
 		it 'allows user to touch out' do
