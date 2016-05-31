@@ -13,17 +13,20 @@ describe '#balance' do
 	end
 
 
-describe "#top_up" do
+	describe "#top_up" do
 
-  it { is_expected.to respond_to(:top_up).with(1).argument }
+		it { is_expected.to respond_to(:top_up).with(1).argument }
 
-  it "should increase the balance" do
-    bal = subject.balance
-    expect(subject.top_up(5)).to be == bal + 5
-  end
+		it "should increase the balance" do
+			bal = subject.balance
+			expect(subject.top_up(5)).to be == (bal + 5)
+		end
 
+		it 'raises an error if top_up amount would push balance over 90' do
+			expect { subject.top_up(91) }.to raise_error "Can't add to your balance; would breach the £90 limit"
+		end
 
-end
+	end
 
 end
 end
