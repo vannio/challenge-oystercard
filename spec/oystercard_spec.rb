@@ -5,6 +5,7 @@ describe Oystercard do
 	subject(:oystercard) { described_class.new }
 
 	let(:station) { double :station }
+	let(:exit_station) { double :exit_station }
 
 	context '#balance' do
 
@@ -73,17 +74,26 @@ describe Oystercard do
 
 	context '#touch_out' do
 
+		it { is_expected.to respond_to(:touch_out).with(1).argument }
+
+		it 'expects the card to save the exit station' do
+			oystercard.topup(10)
+			oystercard.touch_in(station)
+			oystercard.touch_out(exit_station)
+			expect(oystercard.exit_station).to eq(exit_station)
+		end
+
 		it 'allows user to touch out' do
 			oystercard.topup(10)
 			oystercard.touch_in(station)
-			oystercard.touch_out
+			oystercard.touch_out(exit_station)
 			expect(oystercard.in_journey?).to eq(false)
 		end
 
 		it 'charges the minimum fare' do
 			oystercard.topup(5)
 			oystercard.touch_in(station)
-			expect{oystercard.touch_out}.to change{oystercard.balance}.by(-Oystercard::MIN_FARE)
+			expect{oystercard.touch_out(exit_station)}.to change{oystercard.balance}.by(-Oystercard::MIN_FARE)
 		end
 
 	end

@@ -8,7 +8,7 @@ describe "Feature test" do
 		#oystercard.deduct(1)
 		oystercard.in_journey?
 		oystercard.touch_in(:station)
-		oystercard.touch_out
+		oystercard.touch_out(:station)
 
 
 	end
