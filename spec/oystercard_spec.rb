@@ -56,8 +56,13 @@ describe Oystercard do
 	context '#touch_in' do
 
 		it 'allows user to touch in' do
+			oystercard.topup(10)
 			oystercard.touch_in
 			expect(oystercard.in_journey?).to eq(true)
+		end
+
+		it 'fails if balance is below MIN_FARE' do
+			expect{oystercard.touch_in}.to raise_error "insufficient balance"
 		end
 
 	end
@@ -66,13 +71,18 @@ describe Oystercard do
 	context '#touch_out' do
 
 		it 'allows user to touch out' do
+			oystercard.topup(10)
 			oystercard.touch_in
 			oystercard.touch_out
 			expect(oystercard.in_journey?).to eq(false)
 		end
 
+		it 'charges the minimum fare' do
+			oystercard.topup(5)
+			oystercard.touch_in
+			expect{oystercard.touch_out}.to change{oystercard.balance}.by(-Oystercard::MIN_FARE)
+		end
+
 	end
-
-
 
 end
