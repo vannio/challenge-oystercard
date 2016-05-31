@@ -1,16 +1,34 @@
 require "Oystercard"
 
 describe Oystercard do
-  it "starts with balance of 0" do
-    expect(subject.balance).to eq(0)
+
+  context "when new card" do
+    it "starts with balance of 0" do
+      expect(subject.balance).to eq(0)
+    end
+
+    it "expected to not be in journey" do
+      expect(subject).not_to be_in_journey
+    end
   end
 
-  it "it responds to top_up with argument" do
+  it "responds to top_up with argument" do
     expect(subject).to respond_to(:top_up).with(1).argument
   end
 
-  it "it responds to deduct with argument" do
+  it "responds to deduct with argument" do
     expect(subject).to respond_to(:deduct).with(1).argument
+  end
+
+  it "can touch in" do
+    subject.touch_in
+    expect(subject).to be_in_journey
+  end
+
+  it "can touch out" do
+    subject.touch_in
+    subject.touch_out
+    expect(subject).not_to be_in_journey
   end
 
   describe "#top_up" do
