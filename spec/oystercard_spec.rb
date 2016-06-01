@@ -12,13 +12,8 @@ describe Oystercard do
     end
 
     it "has no entry station set" do
-      expect(subject.entry_station).to eq nil
+      expect(subject.current_journey).to eq nil
     end
-
-    it "has no journey history saved" do
-      expect(subject.journeys).to be_empty
-    end
-
   end
 
   it "responds to top_up with argument" do
@@ -39,7 +34,7 @@ describe Oystercard do
       it "stores entry station" do
         subject.top_up(1)
         subject.touch_in(station)
-        expect(subject.entry_station).to eq station
+        expect(subject.current_journey[:entry_station]).to eq station
       end
     end
 
@@ -56,9 +51,12 @@ describe Oystercard do
     let(:entry_station){ double :station }
     let(:exit_station){ double :station }
 
-    it "can touch out" do
+    before do
       subject.top_up(1)
       subject.touch_in(entry_station)
+    end
+
+    it "can touch out" do
       subject.touch_out(exit_station)
       expect(subject).not_to be_in_journey
     end
@@ -68,28 +66,14 @@ describe Oystercard do
     end
 
     it "stores exit station" do
-      subject.top_up(1)
-      subject.touch_in(entry_station)
       subject.touch_out(exit_station)
-      expect(subject.exit_station).to eq exit_station
+      expect(subject.log.last[:exit_station]).to eq exit_station
     end
 
-    it "forgets entry station" do
-      subject.top_up(1)
-      subject.touch_in(entry_station)
+    it "forgets current journey" do
       subject.touch_out(exit_station)
-      expect(subject.entry_station).to eq nil
+      expect(subject.current_journey).to eq nil
     end
-
-    let(:journey){ {entry_station: entry_station, exit_station: exit_station} }
-
-    it "stores a journey" do
-      subject.top_up(1)
-      subject.touch_in(entry_station)
-      subject.touch_out(exit_station)
-      expect(subject.journeys).to include journey
-    end
-
   end
 
   describe "#top_up" do
@@ -102,4 +86,36 @@ describe Oystercard do
       expect{subject.top_up(1)}.to raise_error "Maximum balance of #{max_balance} reached!"
     end
   end
+
+  describe "#log" do
+
+    let(:entry_station){ double :station }
+    let(:exit_station){ double :station }
+    let(:journey){ {entry_station: entry_station, exit_station: exit_station} }
+
+
+    it "shows an empty journey history" do
+      expect(subject.log).to eq []
+    end
+
+    it "stores journey history" do
+      subject.top_up(1)
+      subject.touch_in(entry_station)
+      subject.touch_out(exit_station)
+      expect(subject.log).to include journey
+    end
+  end
+
 end
+
+
+
+
+
+
+
+
+
+
+
+

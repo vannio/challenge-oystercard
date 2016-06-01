@@ -2,7 +2,7 @@ require 'station'
 
 describe Station  do
 
-  subject(:station){described_class.new("Bank", 1)}
+  subject {described_class.new("Bank", 1)}
 
   context "when new station created" do
     it "has a name" do
