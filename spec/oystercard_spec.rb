@@ -15,7 +15,7 @@ describe Oystercard do
     end
 
     it "has no entry station set" do
-      expect(subject.current_journey).to eq nil
+      expect(subject.current_journey).to be_empty
     end
   end
 
@@ -24,9 +24,7 @@ describe Oystercard do
   end
 
   describe "#touch_in" do
-
     context "when card has sufficient balance" do
-
       before do
         subject.top_up(1)
         subject.touch_in(entry_station)
@@ -70,7 +68,7 @@ describe Oystercard do
 
     it "forgets current journey" do
       subject.touch_out(exit_station)
-      expect(subject.current_journey).to eq nil
+      expect(subject.current_journey).to be_empty
     end
   end
 
