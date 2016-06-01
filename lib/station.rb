@@ -1,9 +1,9 @@
 class Station
 
-	# attr_reader :station
+	attr_reader :station
 
-	# def initialize
-	# 	@station = "Paddington"
+	def initialize(station)
+		@station = station
 	
-	# end
+	end
 end

@@ -41,28 +41,45 @@ describe Oystercard do
 			end
 		end
 
-		describe '#touch_out' do
+		describe '#touch_out(station)' do
 			it 'should indicate that the user has touched out and ends journey' do
 				subject.top_up(5)
 				subject.touch_in(station)
-				subject.touch_out
+				subject.touch_out(station)
 				expect(subject).not_to be_in_journey
 			end
 
 			it "reduces the card balance by the journey fare #{Oystercard::FARE}" do
 				subject.top_up(5)
 				subject.touch_in(station)
-				subject.touch_out
-				expect{subject.touch_out}.to change{subject.balance}.by "-#{Oystercard::FARE}".to_i
+				subject.touch_out(station)
+				expect{subject.touch_out(station)}.to change{subject.balance}.by "-#{Oystercard::FARE}".to_i
 			end	
 
 			it 'sets the entry_station to nil on touch_out' do
 				subject.top_up(5)
 				subject.touch_in(station)
-				expect{subject.touch_out}.to change{subject.entry_station}.to nil
+				expect{subject.touch_out(station)}.to change{subject.entry_station}.to nil
 			end
 
+			it 'stores the name of a journey\'s exit station' do
+				subject.top_up(5)
+				subject.touch_in(station)
+				subject.touch_out(station)
+				expect(subject.exit_station).to eq station
+			end
+			# 	it 'reset the journey\'s entry and exit stations' do
+			# 	subject.top_up(5)
+			# 	subject.touch_in(station)
+			# 	subject.touch_out(station)
+			# 	expect(subject.exit_station).to eq nil
+			# end
+
+
+
 		end
+
+
 
 		# describe '#entry_station'
 		# 	it 'allows a card to "know" & store entry_station
