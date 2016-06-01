@@ -11,7 +11,7 @@ describe Oystercard do
 		expect(oystercard.journeys).to be_empty
 	end
 
-	context '#balance' do
+	describe '#balance' do
 
 		it 'should eq zero by default' do
 			expect(oystercard.balance).to eq 0
@@ -19,7 +19,7 @@ describe Oystercard do
 
 	end
 
-	context '#topup' do
+	describe '#topup' do
 
 		it 'should respond to #topup with 1 argument' do
 			expect(oystercard).to respond_to(:topup).with(1).argument
@@ -37,7 +37,7 @@ describe Oystercard do
 
 	end
 
-	context '#in_journey' do
+	describe '#in_journey' do
 
 		it { is_expected.to respond_to(:in_journey?)}
 
@@ -53,7 +53,7 @@ describe Oystercard do
 
 	end
 
-	context '#touch_in' do
+	describe '#touch_in' do
 
 		it { is_expected.to respond_to(:touch_in).with(1).argument }
 
@@ -82,7 +82,7 @@ describe Oystercard do
 	end
 
 
-	context '#touch_out' do
+	describe '#touch_out' do
 
 		it { is_expected.to respond_to(:touch_out).with(1).argument }
 
