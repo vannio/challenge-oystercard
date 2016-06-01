@@ -44,13 +44,13 @@ describe Journey do
 
   describe "#fare" do
     it "should have a penalty fare if there is no start" do
-      expect(subject.fare).to eq described_class::PENALTY_FARE
+      expect(subject.fare).to eq(-described_class::PENALTY_FARE)
     end
 
-    it "should have a default fare if journey is complete" do
+    it "should refund the excess fare charged once the journey is complete" do
       subject.start(entry_station)
       subject.finish(exit_station)
-      expect(subject.fare).to eq described_class::MINIMUM_FARE
+      expect(subject.fare).to eq(5)
     end
   end
 end

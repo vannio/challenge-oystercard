@@ -3,7 +3,6 @@ require "Oystercard"
 describe Oystercard do
   let(:entry_station){ double :station }
   let(:exit_station){ double :station }
-  # let(:journey){ {entry_station: entry_station, exit_station: exit_station} }
 
   context "when new card" do
     it "starts with balance of 0" do
@@ -36,12 +35,12 @@ describe Oystercard do
       before do
         subject.top_up(10)
       end
-      it "should refund the difference when journey is complete" do
+      it "deducts penalty fare if jounrye is incomplete" do
+        expect{subject.touch_out(exit_station)}.to change{subject.balance}.by -6
+      end
+      it "refunds the difference when journey is complete" do
         subject.touch_in(entry_station)
         expect{subject.touch_out(exit_station)}.to change{subject.balance}.by 5
-      end
-      it "should charge penalty fare if not touched in" do
-        expect{subject.touch_out(exit_station)}.to change{subject.balance}.by -6
       end
     end
   end
@@ -50,8 +49,8 @@ describe Oystercard do
     it "adds to the balance" do
       expect{subject.top_up(1)}.to change{subject.balance}.by(1)
     end
-    it "doesnt allow to exceed max balance" do
-      max_balance = Oystercard::MAX_BALANCE
+    it "doesnt allow topup to exceed max balance" do
+      max_balance = described_class::MAX_BALANCE
       subject.top_up(max_balance)
       expect{subject.top_up(1)}.to raise_error "Maximum balance of #{max_balance} reached!"
     end
