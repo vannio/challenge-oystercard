@@ -21,17 +21,28 @@ describe Oystercard do
         expect{ subject.touch_in(entry_station) }.to raise_error "Error: minimum balance less than minimum fare. Top-up!"
       end
     end
+    context "when card has sufficient balance" do
+      before do
+        subject.top_up(10)
+      end
+      it "deducts penalty fare" do
+        expect{subject.touch_in(exit_station)}.to change {subject.balance}.by -6
+      end
+    end
   end
 
   describe "#touch_out" do
-    before do
-      subject.top_up(1)
-      subject.touch_in(entry_station)
-    end
-
-
-    it "deducts min fare from balance on touch out" do
-      expect{subject.touch_out(exit_station)}.to change{subject.balance}.by(-1)
+    context "when card has sufficient balance" do
+      before do
+        subject.top_up(10)
+      end
+      it "should refund the difference when journey is complete" do
+        subject.touch_in(entry_station)
+        expect{subject.touch_out(exit_station)}.to change{subject.balance}.by 5
+      end
+      it "should charge penalty fare if not touched in" do
+        expect{subject.touch_out(exit_station)}.to change{subject.balance}.by -6
+      end
     end
   end
 
