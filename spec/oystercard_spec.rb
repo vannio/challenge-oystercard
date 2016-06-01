@@ -37,31 +37,10 @@ describe Oystercard do
 
 	end
 
-	describe '#in_journey' do
-
-		it { is_expected.to respond_to(:in_journey?)}
-
-		it '#in_journey = false on initialization' do
-			expect(oystercard.in_journey?).to eq(false)
-		end
-
-		it 'in_journey? true if entry_station exists' do
-			oystercard.topup(10)
-			oystercard.touch_in(station)
-			expect(oystercard.in_journey?).to eq(true)
-		end
-
-	end
 
 	describe '#touch_in' do
 
 		it { is_expected.to respond_to(:touch_in).with(1).argument }
-
-		it 'expects the card to save the entry station' do
-			oystercard.topup(10)
-			oystercard.touch_in(station)
-			expect(oystercard.journey[:entry_station]).to eq(station)
-		end
 
 		it 'allows user to touch in' do
 			oystercard.topup(10)
@@ -73,12 +52,6 @@ describe Oystercard do
 			expect{oystercard.touch_in(station)}.to raise_error "insufficient balance"
 		end
 
-		it 'expects an entry_station to be stored in the hash @journey' do
-			oystercard.topup(10)
-			oystercard.touch_in(station)
-			expect(oystercard.journey[:entry_station]).to eq(station)
-		end
-
 	end
 
 
@@ -86,12 +59,6 @@ describe Oystercard do
 
 		it { is_expected.to respond_to(:touch_out).with(1).argument }
 
-		it 'expects the card to save the exit station' do
-			oystercard.topup(10)
-			oystercard.touch_in(station)
-			oystercard.touch_out(exit_station)
-			expect(oystercard.journey[:exit_station]).to eq(exit_station)
-		end
 
 		it 'allows user to touch out' do
 			oystercard.topup(10)
