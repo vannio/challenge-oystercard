@@ -37,31 +37,22 @@ describe Oystercard do
 		it 'should not be start as in journey' do
 		expect(subject.in_journey?).to eq false
 		end
-		# it 'raises an error if not currently traveling' do
-		# expect { subject.top_up(91) }.to raise_error "Can't add to your balance; would breach the £90 limit"
-		# end
-				
-		# it 'necessarilly has a starting value of false; not in-transit' do 
-		# expect(subject.in_journey?).to eq false
-		# end
-
-	
-		# it 'has a value of true after being used to \'touch in\', but not yet to \'touch out' do
-	
-		# 	expect(subject.in_journey).to eq true
-	
-		# end
 	end
 
 	describe '#touch_in' do
 		it 'should indicate that user has touched in and begins journey' do
+		subject.top_up(2)
 		subject.touch_in
 		expect(subject).to be_in_journey 
 		end
+		it 'raises an error if card balance is less than £1' do
+		expect {subject.touch_in}.to raise_error "Can't touch in your balance is below £1"
 		end
+	end
 
 		describe '#touch_out' do
 		it 'should indicate that the user has touched out and ends journey' do
+		subject.top_up(2)
 		subject.touch_in
 		subject.touch_out
 		expect(subject).not_to be_in_journey
