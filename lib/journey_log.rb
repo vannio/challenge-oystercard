@@ -1,15 +1,24 @@
 require_relative "journey"
 
 class JourneyLog
-  attr_reader :logs
+  attr_reader :journeys
 
-  def initialize
-    @logs = []
+  def initialize(journey = Journey.new)
+    @journeys = []
+    @current_journey = journey
   end
+
 
   def new_journey
     journey = Journey.new
-    @logs << journey
+    @journeys << journey
     journey
   end
+
+  private
+
+  def current_journey
+    @current_journey
+  end
+
 end
