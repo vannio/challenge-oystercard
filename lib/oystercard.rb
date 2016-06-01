@@ -1,6 +1,8 @@
 
 class Oystercard
 
+	BALANCE_LIMIT = 90
+
 	attr_reader :balance, :in_journey
 
 	def initialize
@@ -9,13 +11,13 @@ class Oystercard
 	end
 
 	def top_up(amount)
-		fail "Can't add to your balance; would breach the £90 limit" if limit_reached?(amount)
+		fail "Can't add to your balance; would breach the £#{Oystercard::BALANCE_LIMIT} limit" if @balance + amount > BALANCE_LIMIT
 		@balance += amount
 	end
 
-	def limit_reached?(amount)
-		@balance + amount > 90
-	end
+	# def limit_reached?(amount)
+	# 	@balance + amount > BALANCE_LIMIT
+	# end
 
 	def deduct(amount)
 		@balance -= amount

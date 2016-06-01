@@ -19,8 +19,8 @@ describe Oystercard do
 		expect(subject.top_up(5)).to be == (bal + 5)
 		end
 
-		it 'raises an error if top_up amount would push balance over 90' do
-		expect { subject.top_up(91) }.to raise_error "Can't add to your balance; would breach the £90 limit"
+		it 'raises an error if top_up amount would push balance over #{Oystercard::BALANCE_LIMIT} ' do
+		expect { subject.top_up(91) }.to raise_error "Can't add to your balance; would breach the £#{Oystercard::BALANCE_LIMIT} limit"
 		end
 		end 
 
@@ -55,13 +55,16 @@ describe Oystercard do
 
 	describe '#touch_in' do
 		it 'should indicate that user has touched in and begins journey' do
-		expect(subject.touch_in).to eq true 
+		subject.touch_in
+		expect(subject).to be_in_journey 
 		end
 		end
 
 		describe '#touch_out' do
 		it 'should indicate that the user has touched out and ends journey' do
-		expect(subject.touch_out).to eq false
+		subject.touch_in
+		subject.touch_out
+		expect(subject).not_to be_in_journey
 		end
 	end
 	end 
