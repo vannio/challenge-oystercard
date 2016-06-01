@@ -54,10 +54,10 @@ describe Oystercard do
 			expect{oystercard.touch_in(station)}.to raise_error "insufficient balance"
 		end
 
-		it 'charges penalty fare when incomplete journey (no exit)' do
+		it 'charges penalty fare when incomplete journey (no finish)' do
 			oystercard.topup(10)
 			oystercard.touch_in(station)
-			expect{oystercard.touch_in(station)}.to change{oystercard.balance}.by (-Journey::PENALTY_FARE)
+			expect{ oystercard.touch_in(station) }.to change{ oystercard.balance }.by (-Journey::PENALTY_FARE)
 		end
 	end
 
