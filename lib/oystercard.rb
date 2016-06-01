@@ -15,7 +15,7 @@ class Oystercard
 	end
 
 	def in_journey?
-		@in_journey
+		@entry_station
 	end
 
 	def top_up(amount)
