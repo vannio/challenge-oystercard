@@ -1,4 +1,4 @@
-require 'journey'
+require_relative 'journey'
 
 class Oystercard
 
@@ -25,14 +25,17 @@ class Oystercard
 
   def touch_in(station)
     fail 'insufficient balance' if balance < MIN_FARE
-		@journeys << journey.finish if @journey
+		if @journey
+			deduct(@journey.fare)
+			@journeys << journey.finish
+		end
     @journey = Journey.new(station)
   end
 
   def touch_out(station)
-    deduct(MIN_FARE)
 		@journey = Journey.new if @journey == nil
-    @journeys << @journey.finish
+    @journeys << @journey.finish(station)
+		deduct(@journey.fare)
 		@journey = nil
   end
 

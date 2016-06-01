@@ -1,4 +1,4 @@
-require 'oystercard'
+require_relative 'oystercard'
 
 class Journey
 

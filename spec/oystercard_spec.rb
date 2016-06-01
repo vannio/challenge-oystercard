@@ -6,6 +6,7 @@ describe Oystercard do
 
 	let(:station) { double :station }
 	let(:exit_station) { double :exit_station }
+	let(:journey) {double :journey}
 
 	it 'has an empty list of arrays by default' do
 		expect(oystercard.journeys).to be_empty
@@ -42,6 +43,7 @@ describe Oystercard do
 
 		it { is_expected.to respond_to(:touch_in).with(1).argument }
 
+
 		it 'allows user to touch in' do
 			oystercard.topup(10)
 			oystercard.touch_in(station)
@@ -52,6 +54,11 @@ describe Oystercard do
 			expect{oystercard.touch_in(station)}.to raise_error "insufficient balance"
 		end
 
+		it 'charges penalty fare when incomplete journey (no exit)' do
+			oystercard.topup(10)
+			oystercard.touch_in(station)
+			expect{oystercard.touch_in(station)}.to change{oystercard.balance}.by (-Journey::PENALTY_FARE)
+		end
 	end
 
 
@@ -67,10 +74,15 @@ describe Oystercard do
 			expect(oystercard.in_journey?).to eq(false)
 		end
 
-		it 'charges the minimum fare' do
-			oystercard.topup(5)
+		it 'charges min fair for complete journey' do
+			oystercard.topup(10)
 			oystercard.touch_in(station)
-			expect{oystercard.touch_out(exit_station)}.to change{oystercard.balance}.by(-Oystercard::MIN_FARE)
+			expect{oystercard.touch_out(exit_station)}.to change{oystercard.balance}.by (-Oystercard::MIN_FARE)
+		end
+
+		it 'charges PENALTY_FARE for incomplete journey (no entry)' do
+			oystercard.topup(10)
+			expect{oystercard.touch_out(exit_station)}.to change{oystercard.balance}.by (-Journey::PENALTY_FARE)
 		end
 
 	end
