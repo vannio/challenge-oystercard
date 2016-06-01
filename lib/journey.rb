@@ -1,19 +1,29 @@
 class Journey
-  attr_reader :current_journey
 
-  def initialize
-    @current_journey = Hash.new
-  end
+  PENALTY_FARE = 6
+  MINIMUM_FARE = 1
+  attr_reader :entry_station, :exit_station
 
   def start(station)
-    @current_journey[:entry_station] = station
+    @entry_station = station
   end
 
   def finish(station)
-    @current_journey[:exit_station] = station
+    @exit_station = station
   end
 
   def in_journey?
-    @current_journey[:entry_station] && !@current_journey[:exit_station]
+    entry_station && !exit_station
+  end
+
+  def fare
+    return MINIMUM_FARE if complete?
+    PENALTY_FARE
+  end
+
+  private
+
+  def complete?
+    !!entry_station && !!exit_station
   end
 end

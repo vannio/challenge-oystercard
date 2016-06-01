@@ -1,3 +1,5 @@
+require_relative 'journey'
+
 class Oystercard
 
   MAX_BALANCE = 90
@@ -5,26 +7,20 @@ class Oystercard
 
   attr_reader :balance, :current_journey, :log
 
-  def initialize
+  def initialize(journey = Journey.new)
     @balance = 0
-    @current_journey = Hash.new
+    @current_journey = journey
     @log = []
-  end
-
-  def in_journey?
-    !current_journey.empty?
   end
 
   def touch_in(station)
     fail "Error: minimum balance less than minimum fare. Top-up!" if @balance < MIN_FARE
-    @current_journey = { entry_station: station }
-    @log << @current_journey
+    update_log
   end
 
   def touch_out(station)
     deduct(MIN_FARE)
-    @current_journey[:exit_station] = station
-    @current_journey = Hash.new
+    reset_journey
   end
 
   def top_up(amount)
@@ -36,5 +32,13 @@ class Oystercard
 
   def deduct(amount)
     @balance -= amount
+  end
+
+  def reset_journey
+    @current_journey = Journey.new
+  end
+
+  def update_log
+    @log << @current_journey
   end
 end

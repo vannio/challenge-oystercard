@@ -11,7 +11,7 @@ describe Journey do
 
     it "stores entry station" do
       subject.start(entry_station)
-      expect(subject.current_journey[:entry_station]).to eq entry_station
+      expect(subject.entry_station).to eq entry_station
     end
   end
 
@@ -22,7 +22,7 @@ describe Journey do
 
     it "stores exit station" do
       subject.finish(exit_station)
-      expect(subject.current_journey[:exit_station]).to eq exit_station
+      expect(subject.exit_station).to eq exit_station
     end
   end
 
@@ -39,6 +39,18 @@ describe Journey do
     it "shouldn't be in journey after finishing" do
       subject.finish(exit_station)
       expect(subject).not_to be_in_journey
+    end
+  end
+
+  describe "#fare" do
+    it "should have a penalty fare if there is no start" do
+      expect(subject.fare).to eq described_class::PENALTY_FARE
+    end
+
+    it "should have a default fare if journey is complete" do
+      subject.start(entry_station)
+      subject.finish(exit_station)
+      expect(subject.fare).to eq described_class::MINIMUM_FARE
     end
   end
 end
