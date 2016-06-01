@@ -55,18 +55,4 @@ describe Oystercard do
       expect{subject.top_up(1)}.to raise_error "Maximum balance of #{max_balance} reached!"
     end
   end
-
-  describe "#log" do
-    it "shows an empty journey history" do
-      expect(subject.log).to eq []
-    end
-
-    it "has a journey history" do
-      subject.top_up(1)
-      subject.touch_in(entry_station)
-      subject.touch_out(exit_station)
-      expect(subject.log).to_not be_empty
-    end
-  end
-
 end
