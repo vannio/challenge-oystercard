@@ -24,16 +24,17 @@ describe Oystercard do
 
     context "when card has sufficient balance" do
 
-      let(:station){ double :station }
-      it "can touch in" do
+      before do
         subject.top_up(1)
         subject.touch_in(station)
+      end
+
+      let(:station){ double :station }
+      it "can touch in" do
         expect(subject).to be_in_journey
       end
 
       it "stores entry station" do
-        subject.top_up(1)
-        subject.touch_in(station)
         expect(subject.current_journey[:entry_station]).to eq station
       end
     end
