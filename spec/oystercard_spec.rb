@@ -1,6 +1,9 @@
 require "Oystercard"
 
 describe Oystercard do
+  let(:entry_station){ double :station }
+  let(:exit_station){ double :station }
+  let(:journey){ {entry_station: entry_station, exit_station: exit_station} }
 
   context "when new card" do
     it "starts with balance of 0" do
@@ -26,32 +29,26 @@ describe Oystercard do
 
       before do
         subject.top_up(1)
-        subject.touch_in(station)
+        subject.touch_in(entry_station)
       end
 
-      let(:station){ double :station }
       it "can touch in" do
         expect(subject).to be_in_journey
       end
 
       it "stores entry station" do
-        expect(subject.current_journey[:entry_station]).to eq station
+        expect(subject.current_journey[:entry_station]).to eq entry_station
       end
     end
 
     context "when card has insufficient balance" do
-      let(:station){ double :station }
       it "raises error if card balance below minimum fare value" do
-        expect{ subject.touch_in(station) }.to raise_error "Error: minimum balance less than minimum fare. Top-up!"
+        expect{ subject.touch_in(entry_station) }.to raise_error "Error: minimum balance less than minimum fare. Top-up!"
       end
     end
   end
 
   describe "#touch_out" do
-
-    let(:entry_station){ double :station }
-    let(:exit_station){ double :station }
-
     before do
       subject.top_up(1)
       subject.touch_in(entry_station)
@@ -89,12 +86,6 @@ describe Oystercard do
   end
 
   describe "#log" do
-
-    let(:entry_station){ double :station }
-    let(:exit_station){ double :station }
-    let(:journey){ {entry_station: entry_station, exit_station: exit_station} }
-
-
     it "shows an empty journey history" do
       expect(subject.log).to eq []
     end
@@ -108,15 +99,3 @@ describe Oystercard do
   end
 
 end
-
-
-
-
-
-
-
-
-
-
-
-
