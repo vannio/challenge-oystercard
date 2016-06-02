@@ -88,7 +88,7 @@ describe Oystercard do
 
 			it "touch_in updates the previous_journeys array" do
 				subject.top_up(5)
-				expect { subject.touch_in(station) }.to change { subject.previous_journeys }
+				expect { subject.touch_in(station) }.to change { subject.current_journey }
 			end
 
 			it "touch_out updates the previous_journeys array" do
