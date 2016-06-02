@@ -8,17 +8,17 @@ class Oystercard
 	FARE = 1
 
 
-	attr_reader :balance, :in_journey, :entry_station, :exit_station
+	attr_reader :balance, :previous_journeys, :current_journey
 
 	def initialize
 		@balance = 0
 		@in_journey = false
-		@entry_station = nil
-		@exit_station = nil
+		@previous_journeys = []
+		@current_journey = Hash.new
 	end
 
 	def in_journey?
-		@entry_station
+		!@current_journey.empty?
 	end
 
 	def top_up(amount)
@@ -30,16 +30,15 @@ class Oystercard
 	def touch_in(station)
 		fail "Can't touch in your balance is below £#{Oystercard::MIN_LIMIT}" if @balance < MIN_LIMIT
 		@in_journey = true
-		@entry_station = station
+		@current_journey[:entry_station] = station
 		self
 	end
 
 	def touch_out(station)
 		@in_journey = false
-		@exit_station = station
-		# saves the journey and then sets entry station to nil
-		@entry_station = nil
-		# @exit_station = nil
+		@current_journey[:exit_station] = station
+		@previous_journeys << @current_journey
+		@current_journey = Hash.new
 		deduct(FARE)
 		self
 	end
