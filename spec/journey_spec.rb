@@ -60,28 +60,37 @@ describe Journey do
     end
   end
 
-    # it "should indicate that user has touched in and begins journey" do
-    #   expect(subject).to be_in_journey
-    # end
+  describe "#fare" do
+    context "is a complete journey (with entry and exit station)" do
+      before do
+        subject.entry_station = station
+        subject.exit_station = station
+      end
 
-    # it 'stores the name of a journey\'s entry station' do
-    #   expect(subject.current_journey[:entry_station]).to eq station
-    # end
-    #
-    # it 'sets the entry_station to nil on touch_out' do
-    #   expect{subject.touch_out(station)}.to change{subject.current_journey[:entry_station]}.to nil
-    # end
-    #
-    # it 'should indicate that the user has touched out and ends journey' do
-    #   expect(subject).not_to be_in_journey
-    # end
-    #
-    # it 'stores the name of a journey\'s exit station' do
-    #   expect(subject.previous_journeys.last[:exit_station]).to eq station
-    # end
-    #
-    # it "resets the current journey on touch out" do
-    #   expect(subject.current_journey).to be_empty
-    # end
+      it "should return the mimimum fare" do
+        expect(subject.fare).to eq described_class::MIN_FARE
+      end
+    end
 
+    context "has an entry station but no exit station" do
+      before do
+        subject.entry_station = station
+      end
+
+      it "should return the penalty fare" do
+        expect(subject.fare).to eq described_class::PENALTY_FARE
+      end
+    end
+
+    context "has an exit station but no entry station" do
+      before do
+        subject.exit_station = station
+      end
+      
+      it "should return the penalty fare" do
+        expect(subject.fare).to eq described_class::PENALTY_FARE
+      end
+    end
+
+  end
 end

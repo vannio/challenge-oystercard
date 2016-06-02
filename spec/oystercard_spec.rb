@@ -47,8 +47,8 @@ describe Oystercard do
 					subject.touch_out(station)
 				end
 
-				it "reduces the card balance by the journey fare #{Oystercard::FARE}" do
-					expect{subject.touch_out(station)}.to change{subject.balance}.by "-#{Oystercard::FARE}".to_i
+				it "reduces the card balance by the journey fare" do
+					expect{subject.touch_out(station)}.to change{subject.balance}
 				end
 			end
 		end
