@@ -34,13 +34,13 @@ describe Oystercard do
 					subject.touch_in(station)
 				end
 
-				it "should indicate that user has touched in and begins journey" do
-					expect(subject).to be_in_journey
-				end
+				# it "should indicate that user has touched in and begins journey" do
+				# 	expect(subject).to be_in_journey
+				# end
 
-				it 'stores the name of a journey\'s entry station' do
-					expect(subject.current_journey[:entry_station]).to eq station
-				end
+				# it 'stores the name of a journey\'s entry station' do
+				# 	expect(subject.current_journey[:entry_station]).to eq station
+				# end
 			end
 		end
 
@@ -50,30 +50,30 @@ describe Oystercard do
 				subject.touch_in(station)
 			end
 
-			it 'sets the entry_station to nil on touch_out' do
-				expect{subject.touch_out(station)}.to change{subject.current_journey[:entry_station]}.to nil
-			end
+			# it 'sets the entry_station to nil on touch_out' do
+			# 	expect{subject.touch_out(station)}.to change{subject.current_journey[:entry_station]}.to nil
+			# end
 
 			context "has touched out" do
 				before do
 					subject.touch_out(station)
 				end
 
-				it 'should indicate that the user has touched out and ends journey' do
-					expect(subject).not_to be_in_journey
-				end
+				# it 'should indicate that the user has touched out and ends journey' do
+				# 	expect(subject).not_to be_in_journey
+				# end
 
 				it "reduces the card balance by the journey fare #{Oystercard::FARE}" do
 					expect{subject.touch_out(station)}.to change{subject.balance}.by "-#{Oystercard::FARE}".to_i
 				end
 
-				it 'stores the name of a journey\'s exit station' do
-					expect(subject.previous_journeys.last[:exit_station]).to eq station
-				end
-
-				it "resets the current journey on touch out" do
-					expect(subject.current_journey).to be_empty
-				end
+				# it 'stores the name of a journey\'s exit station' do
+				# 	expect(subject.previous_journeys.last[:exit_station]).to eq station
+				# end
+				#
+				# it "resets the current journey on touch out" do
+				# 	expect(subject.current_journey).to be_empty
+				# end
 			end
 		end
 
@@ -95,8 +95,6 @@ describe Oystercard do
 				expect { subject.touch_out(station) }.to change { subject.previous_journeys }
 			end
 		end
-
-
 
 		# describe '#entry_station'
 		# 	it 'allows a card to "know" & store entry_station

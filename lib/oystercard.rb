@@ -30,6 +30,7 @@ class Oystercard
 	def touch_in(station)
 		fail "Can't touch in your balance is below £#{Oystercard::MIN_LIMIT}" if @balance < MIN_LIMIT
 		@in_journey = true
+		# @current_journey.entry_station = station
 		@current_journey[:entry_station] = station
 		self
 	end
