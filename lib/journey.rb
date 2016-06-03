@@ -11,7 +11,7 @@ class Journey
     @exit_station = nil
   end
 
-  def finish(station = nil)
+  def end_journey(station = nil)
     @exit_station = station
     self
   end

@@ -1,4 +1,4 @@
-require_relative 'journey'
+require_relative 'record'
 
 class Oystercard
 
@@ -7,10 +7,11 @@ class Oystercard
 	MAX_BALANCE = 90
   MIN_FARE = 1
 
-	def initialize
+	def initialize(record = Record.new)
 		@balance = 0
 		@in_journey = false
-		@journeys = []
+		@record = record
+		@journeys = record.history
 		@journey = nil
 	end
 
@@ -27,14 +28,14 @@ class Oystercard
     fail 'insufficient balance' if balance < MIN_FARE
 		if @journey
 			deduct(@journey.fare)
-			@journeys << journey.finish
+			@journeys << journey.end_journey
 		end
-    @journey = Journey.new(station)
+    @journey = @record.start(station)
   end
 
   def touch_out(station)
-		@journey = Journey.new if @journey == nil
-    @journeys << @journey.finish(station)
+		@journey = @record.start if @journey == nil
+    @journeys << @journey.end_journey(station)
 		deduct(@journey.fare)
 		@journey = nil
   end

@@ -23,7 +23,7 @@ describe Journey do
     end
 
     it 'returns itself when finish' do
-      expect(journey.finish(other_station)).to eq journey
+      expect(journey.end_journey(other_station)).to eq journey
     end
   end
 
@@ -31,7 +31,7 @@ describe Journey do
 
     subject(:journey) {described_class.new}
 
-    before{journey.finish(other_station)}
+    before{journey.end_journey(other_station)}
 
     it 'has an exit station' do
         expect(journey.exit_station).to eq other_station
@@ -50,7 +50,7 @@ describe Journey do
 
     subject(:journey) {described_class.new(station)}
 
-    before {journey.finish(other_station)}
+    before {journey.end_journey(other_station)}
 
     it 'journey is complete' do
       expect(journey).to be_complete
