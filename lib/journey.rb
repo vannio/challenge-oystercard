@@ -1,4 +1,5 @@
 require_relative 'oystercard'
+require_relative 'fare'
 
 class Journey
 
@@ -21,6 +22,6 @@ class Journey
   end
 
   def fare
-    complete? ? Oystercard::MIN_FARE : PENALTY_FARE
+    Fare.new.calculate(entry_station, exit_station)
   end
 end

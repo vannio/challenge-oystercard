@@ -3,8 +3,8 @@ require 'oystercard'
 
 
 describe Journey do
-  let (:station) {double :station}
-  let(:other_station) { double :other_station }
+  let (:station) {double :station, :zone => 2}
+  let(:other_station) { double :other_station, :zone => 2 }
 
   context "given an entry station" do
 
@@ -16,10 +16,6 @@ describe Journey do
 
     it 'journey is complete' do
       expect(journey).not_to be_complete
-    end
-
-    it 'fare should return minimum fare' do
-      expect(journey.fare).to eq (Journey::PENALTY_FARE)
     end
 
     it 'returns itself when finish' do
@@ -40,10 +36,6 @@ describe Journey do
     it 'journey is complete' do
       expect(journey).not_to be_complete
     end
-
-    it 'fare should return minimum fare' do
-      expect(journey.fare).to eq (Journey::PENALTY_FARE)
-    end
   end
 
   context "given both an entry and exit station" do
@@ -55,10 +47,5 @@ describe Journey do
     it 'journey is complete' do
       expect(journey).to be_complete
     end
-
-    it 'fare should return minimum fare' do
-      expect(journey.fare).to eq (Oystercard::MIN_FARE)
-    end
-
   end
 end
