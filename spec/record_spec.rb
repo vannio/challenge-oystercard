@@ -1,11 +1,11 @@
-require 'record'
+require "record"
 
 describe Record do
   let(:station) { double(:station) }
 
   it "on initialize it creates an empty array" do
     subject { described_class.new }
-    expect(subject.history).to eq []
+    expect(subject.history).to eq([])
   end
 
   describe "#start" do
