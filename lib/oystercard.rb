@@ -1,7 +1,6 @@
-require_relative 'record'
+require_relative "record"
 
 class Oystercard
-
 	attr_reader :balance, :journeys, :journey
 
 	MAX_BALANCE = 90
@@ -25,7 +24,7 @@ class Oystercard
   end
 
   def touch_in(station)
-    fail 'insufficient balance' if balance < MIN_FARE
+    fail "Insufficient balance" if balance < MIN_FARE
 		if @journey
 			deduct(@journey.fare)
 			@journeys << journey.end_journey
@@ -40,10 +39,9 @@ class Oystercard
 		@journey = nil
   end
 
-	  private
+	private
 
-	  def deduct(value)
-	    @balance -= value
-	  end
-
+  def deduct(value)
+    @balance -= value
+  end
 end

@@ -27,7 +27,7 @@ describe Oystercard do
 
   describe "#touch_in" do
     it "fails if balance is below MIN_FARE" do
-      expect { oystercard.touch_in(entry_station) }.to raise_error("insufficient balance")
+      expect { oystercard.touch_in(entry_station) }.to raise_error("Insufficient balance")
     end
 
     it "charges penalty fare when incomplete journey (no finish)" do

@@ -6,7 +6,7 @@ describe Journey do
   let(:exit_station) { double :station, :zone => 2 }
 
   context "given an entry station" do
-    subject(:journey) {described_class.new(entry_station)}
+    subject(:journey) { described_class.new(entry_station) }
 
     it "has an entry station" do
       expect(journey.entry_station).to eq(entry_station)
