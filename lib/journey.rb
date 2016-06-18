@@ -2,7 +2,6 @@ require_relative 'oystercard'
 require_relative 'fare'
 
 class Journey
-
   PENALTY_FARE = 6
 
   attr_reader :entry_station, :exit_station
